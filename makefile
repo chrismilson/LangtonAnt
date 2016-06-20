@@ -13,7 +13,7 @@ compile:
 run: compile
 	java -cp $(OUTPUT) $(OUTFILES)
 
-test: run clean
+demo: run clean
 
 clean:
 	rm -rf $(OUTPUT)
