@@ -1,11 +1,11 @@
+import java.util.ArrayList;
+
 public class Board {
   private boolean[][] cell;
-  private int width, length, antX, antY, antDir;
+  private int width, length;
+  private ArrayList<Ant> ants;
 
   public Board(int l, int w) {
-    antX = w / 2;
-    antY = l / 2;
-    antDir = 0; // 0 = UP, 1 = RIGHT, 2 = DOWN, 3 = LEFT. (all modulo 4)
     cell = new boolean[l][w];
     width = w;
     length = l;
@@ -14,11 +14,11 @@ public class Board {
         cell[i][j] = false;
       }
     }
+    ants = new ArrayList<Ant>();
+    ants.add(new Ant(w / 2, l / 2));
   }
 
   public Board(int size) {
-    antX = size / 2;
-    antY = size / 2;
     cell = new boolean[size][size];
     width = size;
     length = size;
@@ -27,43 +27,40 @@ public class Board {
         cell[i][j] = false;
       }
     }
+    ants = new ArrayList<Ant>();
+    ants.add(new Ant(size / 2, size / 2));
+  }
+
+  public void addAnt(int x, int y) {
+    ants.add(new Ant(x, y));
+  }
+
+  public void addAnt() {
+    ants.add(new Ant(width / 2, length / 2));
   }
 
   public void step() {
-    boolean state = cell[antX][antY];
-    cell[antX][antY] = !cell[antX][antY];
-    if (state) {
-      antDir += 3;
-    } else {
-      antDir++;
+    boolean state;
+    int x, y;
+    for (int i = 0; i < ants.size(); i++) {
+      x = ants.get(i).getX();
+      y = ants.get(i).getY();
+      if (x < 0 || x >= width || y < 0 || y >= length) {
+        ants.remove(i);
+        continue;
+      }
+      state = cell[x][y];
+      cell[x][y] = !cell[x][y];
+      ants.get(i).step(state);
     }
-    switch(antDir % 4) {
-      case 0:
-        antY--;
-        break;
-      case 1:
-        antX++;
-        break;
-      case 2:
-        antY++;
-        break;
-      case 3:
-        antX--;
-        break;
-      default:
-        System.out.println("Butter.");
-    }
+
   }
 
-  public boolean get(int x, int y) {
+  public boolean getState(int x, int y) {
     return cell[x][y];
   }
 
-  public int getX() {
-    return antX;
-  }
-
-  public int getY() {
-    return antY;
+  public ArrayList<Ant> getAnts() {
+    return ants;
   }
 }

@@ -12,15 +12,20 @@ public class LangtonAnt {
   private static JPanel rightPanel;
   private static JPanel boardSpace;
   private static Board board;
+  // private static int count = 0;
 
   public static void main (String[] args) {
     board = new Board(SIZE / RATIO);
 
-    int delay = 0;
+    int delay = 2;
     ActionListener al = new ActionListener() {
       public void actionPerformed(ActionEvent evt) {
           board.step();
           rightPanel.repaint();
+          // if (count++ > 200) {
+          //   count = 0;
+          //   board.addAnt();
+          // }
       }
     };
     Timer timer = new Timer(delay, al);
@@ -58,9 +63,12 @@ class MyPanel extends JPanel {
 
   protected void paintComponent(Graphics g) {
     super.paintComponent(g);
+
+    ArrayList<Ant> ants = board.getAnts();
+
     for (int i = 0; i < size / ratio; i++) {
       for (int j = 0; j < size / ratio; j++) {
-        if (board.get(i, j)) {
+        if (board.getState(i, j)) {
           g.setColor(new Color(0, 0, 0));
           g.fillRect(ratio * i, ratio * j, ratio, ratio);
         } else {
@@ -70,6 +78,11 @@ class MyPanel extends JPanel {
       }
     }
     g.setColor(new Color(255, 0, 0));
-    g.fillOval(board.getX() * ratio, board.getY() * ratio, ratio, ratio);
+    int x, y;
+    for (int i = 0; i < ants.size(); i++) {
+      x = ants.get(i).getX();
+      y = ants.get(i).getY();
+      g.fillOval(x * ratio, y * ratio, ratio, ratio);
+    }
   }
 }

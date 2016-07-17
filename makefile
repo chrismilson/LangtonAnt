@@ -1,7 +1,7 @@
 JC=javac
 OUTPUT=./out
 JFLAGS=-d $(OUTPUT)
-SOURCEFILES=LangtonAnt.java Board.java
+SOURCEFILES=LangtonAnt.java Board.java Ant.java
 OUTFILES=LangtonAnt
 
 all: compile run
